@@ -12,3 +12,9 @@ fs -rm -f -r output;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+data = LOAD 'data.tsv' USING PigStorage('\t') 
+    AS (letra:CHARARRAY, 
+        bolsa:BAG{b:TUPLE(t:CHARARRAY)},
+        mapa:MAP[]);
+DUMP data;
+

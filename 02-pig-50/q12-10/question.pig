@@ -33,3 +33,10 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+x = FOREACH u GENERATE $2;
+DUMP x;
+
+y = FILTER x BY $0 >= 'D' AND $0 <= 'L';
+DUMP y;
+
+STORE y INTO 'output';

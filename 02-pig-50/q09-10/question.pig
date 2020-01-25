@@ -27,5 +27,16 @@
 -- 
 fs -rm -f -r output;
 --
+data = LOAD 'data.csv' USING PigStorage(',') 
+    AS (num:INT, 
+        mujer:CHARARRAY,
+        hombre:CHARARRAY,
+        fecha:CHARARRAY,
+        color:CHARARRAY,
+        cantidad:INT);
+DUMP data;
 
+resultado = FOREACH data GENERATE $1, $2;
+DUMP resultado;
 
+STORE resultado INTO 'output' using PigStorage('@');

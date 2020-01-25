@@ -40,3 +40,24 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+x = FOREACH u GENERATE birthday, SUBSTRING(birthday,5,7) as mm, (int) SUBSTRING(birthday,5,7) as m;
+DUMP x;
+
+y = FOREACH x GENERATE birthday, case mm WHEN '01' THEN 'ene'
+										WHEN '02' THEN 'feb'
+										WHEN '03' THEN 'mar'
+										WHEN '04' THEN 'abr'
+										WHEN '05' THEN 'may'
+										WHEN '06' THEN 'jun'
+										WHEN '07' THEN 'jul'
+										WHEN '08' THEN 'ago'
+										WHEN '09' THEN 'sep'
+										WHEN '10' THEN 'oct'
+										WHEN '11' THEN 'nov'
+										WHEN '12' THEN 'dic'
+										END,
+										mm, m;
+
+DUMP y;
+
+STORE y INTO 'output' using PigStorage(',');

@@ -40,4 +40,28 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+x = FOREACH u GENERATE birthday, ToString(ToDate(birthday, 'yyyy-MM-dd'),'EEE') as fecha;
+DUMP x;
 
+y = FOREACH x GENERATE birthday,SUBSTRING(birthday,8,10),(int)SUBSTRING(birthday,8,10), case fecha
+									WHEN 'Mon' THEN 'lun'
+									WHEN 'Tue' THEN 'mar'
+									WHEN 'Wed' THEN 'mie'
+									WHEN 'Thu' THEN 'jue'
+									WHEN 'Fri' THEN 'vie'
+									WHEN 'Sat' THEN 'sab'
+									WHEN 'Sun' THEN 'dom'
+									end,
+									case fecha 
+									WHEN 'Mon' THEN 'lunes'
+									WHEN 'Tue' THEN 'martes'
+									WHEN 'Wed' THEN 'miercoles'
+									WHEN 'Thu' THEN 'jueves'
+									WHEN 'Fri' THEN 'viernes'
+									WHEN 'Sat' THEN 'sabado'
+									WHEN 'Sun' THEN 'domingo'
+									end;
+
+DUMP y;
+
+STORE y INTO 'output' using PigStorage(',');
