@@ -39,4 +39,11 @@ LOAD DATA LOCAL INPATH 'tbl1.csv' INTO TABLE tbl1;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+DROP TABLE IF EXISTS sln;
 
+CREATE TABLE sln AS SELECT DISTINCT c5
+    FROM (SELECT c5 FROM tbl0 LATERAL VIEW explode(c5) tbl0 as c5) t0 ORDER BY c5;
+
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    SELECT * FROM sln;

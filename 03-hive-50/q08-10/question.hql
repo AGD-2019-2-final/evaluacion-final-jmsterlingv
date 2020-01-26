@@ -40,5 +40,15 @@ LOAD DATA LOCAL INPATH 'tbl1.csv' INTO TABLE tbl1;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+DROP TABLE IF EXISTS suma;
 
+CREATE TABLE suma AS SELECT c2, 
+            sum(valor)
+            FROM
+            tbl0 LATERAL VIEW explode(c6) tbl0 AS clave, valor
+            GROUP BY c2;
+
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    SELECT * FROM suma;
 

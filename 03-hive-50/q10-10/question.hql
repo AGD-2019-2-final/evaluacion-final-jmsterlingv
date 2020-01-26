@@ -23,4 +23,21 @@ LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE t0;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+DROP TABLE IF EXISTS cantidad;
 
+CREATE TABLE cantidad AS SELECT clave, count(*) 
+    FROM (
+        SELECT
+            clave
+        FROM
+            t0
+        LATERAL VIEW
+            explode(c3) t0 AS clave, valor
+        ) t0
+    GROUP BY clave
+    ORDER BY clave;
+
+
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    SELECT * FROM cantidad;

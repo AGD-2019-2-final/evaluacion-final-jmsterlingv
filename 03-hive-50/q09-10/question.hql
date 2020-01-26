@@ -39,3 +39,25 @@ LOAD DATA LOCAL INPATH 'tbl1.csv' INTO TABLE tbl1;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+DROP TABLE IF EXISTS solut;
+
+CREATE TABLE solut AS SELECT
+    t0.c1,
+    t0.c2,
+    t1.c4_2
+FROM
+    tbl0 t0
+JOIN (
+       SELECT
+            c1, c4_1, c4_2
+            FROM
+            tbl1 
+            LATERAL VIEW explode(c4) tbl1 AS c4_1, c4_2
+    ) t1
+ON
+    (t0.c1 = t1.c1 AND t0.c2 = t1.c4_1);
+
+
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+    SELECT * FROM solut;

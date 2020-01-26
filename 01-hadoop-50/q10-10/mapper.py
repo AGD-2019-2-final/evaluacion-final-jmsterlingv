@@ -4,12 +4,12 @@ import sys
 #
 if __name__ == "__main__":
 	for line in sys.stdin:
+		num = int(line.split('\t')[0])
+		num_format = "{:03.0f}".format(num)
+		letras = line.split('\t')[1]
+		letras = letras.rstrip('\r\n')
+		letras_sep = letras.split(',')
 
-		numero=line.split('\t')[0]
-		letra=line.split('\t')[1]
+		for i in range(len(letras)):
 
-
-		#numero=int(numero)
-				
-
-		sys.stdout.write("{}\t{}\n".format(numero, letra))
+			sys.stdout.write("{}\t{}\n".format(str(letras[i]),num_format))
